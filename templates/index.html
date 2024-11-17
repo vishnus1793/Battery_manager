@@ -10,46 +10,62 @@
             text-align: center;
             padding: 50px;
         }
-        .battery-status {
-            font-size: 24px;
+        table {
+            width: 50%;
+            margin: 0 auto;
+            border-collapse: collapse;
         }
-        .battery-status span {
-            font-weight: bold;
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
 <body>
+    <h1>Battery Monitor</h1>
+    <table>
+        <tr>
+            <th>Battery Status</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Battery</td>
+            <td><span id="battery-percent">Loading...</span></td>
+        </tr>
+        <tr>
+            <td>Plugged</td>
+            <td><span id="battery-plugged">Loading...</span></td>
+        </tr>
+    </table>
 
-<h1>Battery Monitor</h1>
-<div class="battery-status">
-    <p>Battery: <span id="battery-percent">Loading...</span></p>
-    <p>Plugged: <span id="battery-plugged">Loading...</span></p>
-</div>
+    <script>
+        function fetchBatteryStatus() {
+            fetch('/battery')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.battery !== undefined) {
+                        // Update battery percentage
+                        document.getElementById('battery-percent').textContent = `${data.battery}%`;
+                        // Update plugged status
+                        document.getElementById('battery-plugged').textContent = data.plugged ? "Yes" : "No";
+                    } else {
+                        // If there's an error, show it
+                        document.getElementById('battery-percent').textContent = "Error: " + data.error;
+                        document.getElementById('battery-plugged').textContent = data.message;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching battery status:', error);
+                });
+        }
 
-<script>
-    function fetchBatteryStatus() {
-        fetch('/battery')
-            .then(response => response.json())
-            .then(data => {
-                if (data.battery !== undefined) {
-                    // Update battery percentage
-                    document.getElementById('battery-percent').textContent = `${data.battery}%`;
-                    // Update plugged status
-                    document.getElementById('battery-plugged').textContent = data.plugged ? "Yes" : "No";
-                } else {
-                    // If there's an error, show it
-                    document.getElementById('battery-percent').textContent = "Error: " + data.error;
-                    document.getElementById('battery-plugged').textContent = data.message;
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching battery status:', error);
-            });
-    }
-
-
-    window.onload = fetchBatteryStatus;
-</script>
-
+        window.onload = fetchBatteryStatus;
+    </script>
 </body>
 </html>

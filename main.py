@@ -3,7 +3,6 @@ import psutil
 
 app = Flask(__name__)
 
-# Route to get the battery status
 @app.route('/battery', methods=['GET'])
 def battery_status():
     try:
@@ -27,7 +26,6 @@ def battery_status():
             "message": str(e)
         })
 
-# Route for the home page (HTML page)
 @app.route('/')
 def index():
     return render_template('index.html')
