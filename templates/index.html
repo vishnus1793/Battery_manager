@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battery Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .battery-status {
+            font-size: 24px;
+        }
+        .battery-status span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Battery Monitor</h1>
+<div class="battery-status">
+    <p>Battery: <span id="battery-percent">Loading...</span></p>
+    <p>Plugged: <span id="battery-plugged">Loading...</span></p>
+</div>
+
+<script>
+    function fetchBatteryStatus() {
+        fetch('/battery')
+            .then(response => response.json())
+            .then(data => {
+                if (data.battery !== undefined) {
+                    // Update battery percentage
+                    document.getElementById('battery-percent').textContent = `${data.battery}%`;
+                    // Update plugged status
+                    document.getElementById('battery-plugged').textContent = data.plugged ? "Yes" : "No";
+                } else {
+                    // If there's an error, show it
+                    document.getElementById('battery-percent').textContent = "Error: " + data.error;
+                    document.getElementById('battery-plugged').textContent = data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching battery status:', error);
+            });
+    }
+
+
+    window.onload = fetchBatteryStatus;
+</script>
+
+</body>
+</html>

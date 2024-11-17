@@ -1,26 +1,36 @@
-import tkinter as tk
+from flask import Flask, jsonify, render_template
 import psutil
-import time
 
-class BatteryMonitorApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Battery Monitor")
-        self.root.geometry("300x100")
-        
-        self.battery_label = tk.Label(self.root, text="Battery: 0%", font=("Arial", 15))
-        self.battery_label.pack(pady=20)
-        self.update_battery_status()
-    def update_battery_status(self):
+app = Flask(__name__)
+
+# Route to get the battery status
+@app.route('/battery', methods=['GET'])
+def battery_status():
+    try:
         battery = psutil.sensors_battery()
         if battery:
             percent = battery.percent
-            self.battery_label.config(text=f"Battery: {percent}%")
+            plugged = battery.power_plugged
+            return jsonify({
+                "battery": percent,
+                "plugged": plugged,
+                "message": "Battery status fetched successfully"
+            })
         else:
-            self.battery_label.config(text="Battery info unavailable")
-        
-        self.root.after(1000, self.update_battery_status)
+            return jsonify({
+                "error": "Battery info unavailable",
+                "message": "Could not fetch battery information. Ensure you're on a battery-powered device."
+            })
+    except Exception as e:
+        return jsonify({
+            "error": "Failed to fetch battery status",
+            "message": str(e)
+        })
+
+# Route for the home page (HTML page)
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = BatteryMonitorApp(root)
-    root.mainloop()
+    app.run(debug=True)
