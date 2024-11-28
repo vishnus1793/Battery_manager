@@ -25,6 +25,21 @@
         th {
             background-color: #f2f2f2;
         }
+        .report-links {
+            margin-top: 20px;
+        }
+        a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -43,6 +58,11 @@
             <td><span id="battery-plugged">Loading...</span></td>
         </tr>
     </table>
+
+    <div class="report-links">
+        <a href="/generate_report">Generate Battery Report</a>
+        <a href="/view_report" target="_blank">View Battery Report</a>
+    </div>
 
     <script>
         function fetchBatteryStatus() {
