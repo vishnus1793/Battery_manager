@@ -2,7 +2,7 @@ from flask import Flask, jsonify, render_template, send_file
 import psutil
 import subprocess
 import os
-
+#Import Random
 app = Flask(__name__)
 
 @app.route('/battery', methods=['GET'])
