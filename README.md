@@ -32,7 +32,4 @@ python main.py
 ```
 
 
-## Author
-
-VisHnu17
 
