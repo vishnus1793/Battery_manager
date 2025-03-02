@@ -6,7 +6,7 @@ BatteryManager is a simple Python-based application for monitoring battery statu
 
 - Displays battery percentage
 - Shows charging/discharging status
-- Provides alerts for low battery
+- Provides insights about the battery
 
 ## Prerequisites
 
